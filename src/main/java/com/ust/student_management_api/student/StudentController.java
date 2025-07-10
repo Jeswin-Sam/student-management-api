@@ -3,13 +3,14 @@ package com.ust.student_management_api.student;
 import com.ust.student_management_api.exceptions.RegisterNumberAlreadyExistsException;
 import com.ust.student_management_api.exceptions.StudentNotFoundException;
 import com.ust.student_management_api.response.ApiResponse;
+import com.ust.student_management_api.student.Student;
+import com.ust.student_management_api.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/v1/student")
@@ -60,20 +61,21 @@ public class StudentController {
     }
 
     // Update student
-    @PutMapping("/update/{id}")
+    @PutMapping("/update")
     public ResponseEntity<ApiResponse<Student>> updateStudent(
-            @PathVariable Long id,
-            @RequestBody Student student
+            @RequestBody Student updatedStudent
     ) {
-        student.setId(id);
+        Student result = studentService.updateStudent(updatedStudent);
+
         ApiResponse<Student> response = new ApiResponse<>(
                 "Updated",
-                204,
-                "Student " + id + " updated successfully!",
-                studentService.updateStudent(student)
+                200,
+                "Student " + updatedStudent.getId() + " updated successfully!",
+                result
         );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
+
 
     // Delete student
     @DeleteMapping("delete/{id}")

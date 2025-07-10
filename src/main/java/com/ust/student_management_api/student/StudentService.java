@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -40,8 +39,11 @@ public class StudentService {
         if (studentRepository.findById(updatedStudent.getId()).isPresent()) {
             Student existingStudent = studentRepository.findById(updatedStudent.getId()).get();
 
+            existingStudent.setName(updatedStudent.getName());
+            existingStudent.setDateOfBirth(updatedStudent.getDateOfBirth());
+            existingStudent.setEmail(updatedStudent.getEmail());
+            existingStudent.setPhoneNumber(updatedStudent.getPhoneNumber());
 
-//            validateStudent(updatedStudent);
             return studentRepository.save(updatedStudent);
         } else {
             throw new EntityNotFoundException("Student not found with ID: " + updatedStudent.getId());
